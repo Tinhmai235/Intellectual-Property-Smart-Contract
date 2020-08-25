@@ -12,7 +12,7 @@ class Process extends Contract {
     return address
   }
   async addProcess (type) {
-    let address = await this.createTax(type)
+    let address = await this.createStage(type)
     this.setToAddress(address)
     return { type: address }
   }

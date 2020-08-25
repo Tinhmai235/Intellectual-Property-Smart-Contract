@@ -1,47 +1,66 @@
 import Contract from 'Contract'
-import User from './users'
-import Message from './message'
-import Verify from './verify'
-import Pocess from './process'
 import Process from './process'
-
+import User from './user'
 class TokenMain extends Contract {
   static viewFuncs = [
-    'get_Create_new_customer',
-    'get_Customer',
-    'get_Place_Order',
-    'get_Create_new_Order',
-    'get_Admin',
-    'get_Create_a_payback',
+    'get_User',
+    'get_Intellectual_Property',
+    'get_Copyright',
+    'get_Trade'
   ]
   static authenticationFuncs = [
-    'createCustomer',
-    'Check_Customer',
-    'Create_new_Order',
-    'Input_send_wallet',
-    'Create_a_payback',
-    'Input_Info',
-    'Transfer',
+    'Intellectual_Property',
+    'Patent',
+    'Industrial_Design',
+    'Innovation',
+    'Petty_Patent',
+    'Copyright', ,
+    'Computer_Program',
+    'Neighbroring_Rights',
+    'Trade',
+    'TradeMark',
+    'Servicemark',
+    'CertificationMark',
+    'CollectiveMark',
+    'Traditional_Knowledge',
+    'Trade_Secrets',
+    'Gegraphical_Indication',
+    'Optical_Dise',
+    'Layout_Design',
   ]
   static publicFuncs = [
-    'Student',
-    'get_Student',
-    'contractInstition',
-    'get_contractInstition',
-    'requiresSystem',
-    'get_requiresSystem',
+    'User',
+    'get_User',
+    'Intellectual_Property',
+    'get_Intellectual_Property',
+    'Patent',
+    'get_Patent',
+    'Industrial_Design',
+    'Innovation',
+    'Petty_Patent',
+    'Copyright',
+    'get_Copyright',
+    'Computer_Program',
+    'Neighbroring_Rights',
+    'Trade',
+    'get_Trade',
+    'TradeMark',
+    'Servicemark',
+    'CertificationMark',
+    'CollectiveMark',
+    'Traditional_Knowledge',
+    'Trade_Secrets',
+    'Gegraphical_Indication',
+    'Optical_Dise',
+    'Layout_Design',
   ]
   static schemas = {
     name: {
       type: String,
-      default: 'MANAGE STUDENT'
+      default: 'INTELLECTUAL PROPERTY RIGHT IN THAILAND'
     },
     accounts: [
       {
-        balance: {
-          type: Number,
-          default: 0
-        },
         type: {
           type: String,
           default: 0
@@ -50,120 +69,194 @@ class TokenMain extends Contract {
           type: String,
           required: true
         }
-
       }
     ]
   }
   constructor(data) {
     super(data)
-    this._user = new User(data)
-    this._verify = new Verify(data)
-    this._message = new Message(data)
     this._process = new Process(data)
+    this._user = new User(data)
   }
- // --------------------USER---------------------------
-  async Student() {
-    let student = await this._user.createUser('STUDENT')
-    return student
+  //--------------------USER------------------------------
+  async User() {
+    let user = await this._user.createUser('USER')
+    return user
   }
-  get_Student() {
-    let student = this._user.getUserByType('STUDENT')
-    return student
+  getUser() {
+    let user = this._user.getUserByType('USER')
+    return user
   }
-  async Manege() {
-    let Sc = await this._user.createUser('SCHOOL_OR_COMPANY')
-    return Sc
+  //---------------------INTELLECTUAL_PROPERTY------------------------------
+  async Intellectual_Property() {
+    this._user.checkUser(this.sender, 'USER')
+    let Intellectual_Property = await this._process.createProcess('INTELLECTUAL_PROPERTY')
+    return Intellectual_Property
   }
-  get_Manege() {
-    let Sc = this._user.getUserByType('SCHOOL_OR_COMPANY')
-    return Sc
+  get_Intellectual_Property() {
+    return this._process.getProcessByType('INTELLECTUAL_PROPERTY')
   }
-   // --------------------CONTRACT_INSTITION---------------------------
-   async contactsInstition() {
-    this._user.checkUser(this.sender, 'STUDENT')
-    let CI= await this._process.createProcess('CONTACTS_INSTITION')
-    return CI
+  async Traditional_Knowledge(address_Patent) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Patent = this._process.getProcessByAddress(address_Patent)
+    if (!check_Patent || check_Patent.type !== 'PATENT')
+      throw 'PATENT IS NOT EXIST'
+    let Traditional_Knowledge = await this._process.createProcess('TRANDITIONAL_KNOWLEDGE')
+    this.setToAddress(Traditional_Knowledge.address)
+    return 'SUCCESS'
   }
-  get_contactsInstition() {
-    return this._process.getProcessByType('CONTACTS_INSTITION')
+  async Trade_Secrets(address_Patent) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Patent = this._process.getProcessByAddress(address_Patent)
+    if (!check_Patent || check_Patent.type !== 'PATENT')
+      throw 'PATENT IS NOT EXIST'
+    let Trade_Secrets = await this._process.createProcess('TRADE_SECRETS')
+    this.setToAddress(Trade_Secrets.address)
+    return 'SUCCESS'
   }
-  // --------------------CONTACTS_INSTITION---------------------------
-  async verifyContacts(address_contractInstition) {
-    this._user.checkUser(this.sender, 'SCHOOL_OR_COMPANY')
-    let check_contractInstition = this._process.getProcessByAddress(address_contractInstition)
-    if (!check_contractInstition || check_contractInstition.type !== 'CONTACTS_INSTITION')
-      throw 'CONTACTS_INSTITION IS NOT EXIST'
-    let verifyContacts = await this._process.createProcess('VERIFY_CONTACTS')
-    return verifyContacts
+  async Gegraphical_Indication(address_Patent) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Patent = this._process.getProcessByAddress(address_Patent)
+    if (!check_Patent || check_Patent.type !== 'PATENT')
+      throw 'PATENT IS NOT EXIST'
+    let Gegraphical_Indication = await this._process.createProcess('GEGRAPHICAL_INDICATION')
+    this.setToAddress(Gegraphical_Indication.address)
+    return 'SUCCESS'
   }
-  get_verifyContacts() {
-    return this._process.getProcessByType('VERIFY_CONTACTS')
+  async Optical_Dise(address_Patent) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Patent = this._process.getProcessByAddress(address_Patent)
+    if (!check_Patent || check_Patent.type !== 'PATENT')
+      throw 'PATENT IS NOT EXIST'
+    let Optical_Dise = await this._process.createProcess('OPTICAL_DISE')
+    this.setToAddress(Optical_Dise.address)
+    return 'SUCCESS'
   }
-  // --------------------MULTISIGNATURE---------------------------
-  async Multisgnature(address_verifyContacts) {
-    this._user.checkUser(this.sender, 'STUDENT')
-    let check_verifyContacts = this._process.getProcessByAddress(address_verifyContacts)
-    if (!check_verifyContacts || check_verifyContacts.type !== 'VERIFY_CONTACTS')
-      throw 'VERIFY_CONTACTS IS NOT EXIST'
-    let Multisgnature = await this._process.createProcess('MULTISIGNATURE')
-    return Multisgnature
+  async Layout_Design(address_Patent) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Patent = this._process.getProcessByAddress(address_Patent)
+    if (!check_Patent || check_Patent.type !== 'PATENT')
+      throw 'PATENT IS NOT EXIST'
+    let Layout_Design = await this._process.createProcess('LAYOUT_DESIGN_OF_INTERGRATED_CIRCUIT')
+    this.setToAddress(Layout_Design.address)
+    return 'SUCCESS'
   }
-  get_Multisgnature() {
-    return this._process.getProcessByType('MULTISIGNATURE')
-  } 
-  // --------------------CHECK_MULTISIGNATURE---------------------------
-  async checkMultisgnature(type) {
-    if (!type || !this.sender) throw 'CANNOT CREATE'
-    if (![1, 2].includes(Number(type))) throw 'VERIFY FAIL'
-    await this._message.checkMessage(this.sender)
-    let verify = await this._verify.createVerify(type - 1, this.sender)
-    this.setToAddress(user.address)
-    return verify
+
+  // --------------------PATENT--------------------------- 
+  async Patent(address_Intellectual_Property) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Intellectual_Property = this._process.getProcessByAddress(address_Intellectual_Property)
+    if (!check_Intellectual_Property || check_Intellectual_Property.type !== 'INTELLECTUAL_PROPERTY')
+      throw 'INTELLECTUAL_PROPERTY IS NOT EXIST'
+    let Patent = await this._process.createProcess('PATENT')
+    return Patent
   }
-  async Correct() {
-    await this._message.checkMessage(this.sender)
-    return this._verify.getVerifyByType('YES', this.sender)
+  get_Patent() {
+    return this._process.getProcessByType('PATENT')
   }
-  
-  async Incorrect() {
-    await this._message.checkMessage(this.sender)
-    return this._verify.getVerifyByType('NO', this.sender)
+  async Industrial_Design(address_Patent) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Patent = this._process.getProcessByAddress(address_Patent)
+    if (!check_Patent || check_Patent.type !== 'PATENT')
+      throw 'PATENT IS NOT EXIST'
+    let Industrial_Design = await this._process.createProcess('INDUSTRIAL_DESIGN')
+    this.setToAddress(Industrial_Design.address)
+    return 'SUCCESS'
   }
-   // --------------------TERMINATES_PROCESS---------------------------
-   async terminatesProcess(address_Incorrect) {
-    this._user.checkUser(this.sender, 'SCHOOL_OR_COMPANY')
-    let check_Incorrect = this._process.getProcessByAddress(address_Incorrect)
-    if (!check_Incorrect || check_Incorrect.type !== 'NO')
-      throw 'NO IS NOT EXIST'
-    let TP = await this._process.createProcess('TERMINATES_PROCESS')
-    return TP
+  async Innovation(address_Patent) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Patent = this._process.getProcessByAddress(address_Patent)
+    if (!check_Patent || check_Patent.type !== 'PATENT')
+      throw 'PATENT IS NOT EXIST'
+    let Innovation = await this._process.createProcess('INNOVATION')
+    this.setToAddress(Innovation.address)
+    return 'SUCCESS'
   }
-  get_terminatesProcess() {
-    return this._process.getProcessByType('TERMINATES_PROCESS')
-  } 
-  // --------------------SIGNED---------------------------
-  async Signed (address_Correct) {
-    this._user.checkUser(this.sender, 'STUDENT')
-    let check_Correct = this._process.getProcessByAddress(address_Correct)
-    if (!check_Correct || check_Correct.type !== 'YES')
-      throw 'YES IS NOT EXIST'
-    let Signed = await this._process.createProcess('SIGN_SUCCESS')
-    return Signed
+  async Petty_Patent(address_Patent) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Patent = this._process.getProcessByAddress(address_Patent)
+    if (!check_Patent || check_Patent.type !== 'PATENT')
+      throw 'PATENT IS NOT EXIST'
+    let Petty_Patent = await this._process.createProcess('PETTY_PATENT')
+    this.setToAddress(Petty_Patent.address)
+    return 'SUCCESS'
   }
-  get_Signed() {
-    return this._process.getProcessByType('SIGN_SUCCESS')
+  // --------------------COPYRIGHT--------------------------
+  async Copyright(address_Intellectual_Property) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Intellectual_Property = this._process.getProcessByAddress(address_Intellectual_Property)
+    if (!check_Intellectual_Property || check_Intellectual_Property.type !== 'INTELLECTUAL_PROPERTY')
+      throw 'INTELLECTUAL_PROPERTY IS NOT EXIST'
+    let Copyright = await this._process.createProcess('COPYRIGHT')
+    return Copyright
   }
-  // --------------------VERIFY_SIGNED---------------------------
-  async verifySigned(address_Signed) {
-    this._user.checkUser(this.sender, 'SCHOOL_OR_COMPANY')
-    let check_Signed = this._process.getProcessByAddress(address_Signed)
-    if (!check_Signed || check_Signed.type !== 'SIGN_SUCCESS')
-      throw 'SIGN_SUCCESS IS NOT EXIST'
-    let verifySigned = await this._process.createProcess('VERIFY_SIGNED')
-    return verifySigned
+  get_Copyright() {
+    return this._process.getProcessByType('COPYRIGHT')
   }
-  get_verifySigned() {
-    return this._process.getProcessByType('VERIFY_SIGNED')
+  async Computer_Program(address_Copyright) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Copyright = this._process.getProcessByAddress(address_Copyright)
+    if (!check_Copyright || check_Copyright.type !== 'COPYRIGHT')
+      throw 'COPYRIGHT IS NOT EXIST'
+    let Computer_Program = await this._process.createProcess('COMPYTER_PROGRAM')
+    this.setToAddress(Computer_Program.address)
+    return 'SUCCESS'
+  }
+  async Neighbroring_Rights(address_Copyright) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Copyright = this._process.getProcessByAddress(address_Copyright)
+    if (!check_Copyright || check_Copyright.type !== 'COPYRIGHT')
+      throw 'COPYRIGHT IS NOT EXIST'
+    let Neighbroring_Rights = await this._process.createProcess('NEIGHBROING_RIGHTS')
+    this.setToAddress(Neighbroring_Rights.address)
+    return 'SUCCESS'
+  }
+  // --------------------TRADE---------------------------
+  async Trade(address_Intellectual_Property) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Intellectual_Property = this._process.getProcessByAddress(address_Intellectual_Property)
+    if (!check_Intellectual_Property || check_Intellectual_Property.type !== 'INTELLECTUAL_PROPERTY')
+      throw 'INTELLECTUAL_PROPERTY IS NOT EXIST'
+    let Trade = await this._process.createProcess('TRADE')
+    return Trade
+  }
+  get_Trade() {
+    return this._process.getProcessByType('TRADE')
+  }
+  async TradeMark(address_Trade) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Trade = this._process.getProcessByAddress(address_Trade)
+    if (!check_Trade || check_Trade.type !== 'TRADE')
+      throw 'TRADE IS NOT EXIST'
+    let TradeMark = await this._process.createProcess('TRADE_MARK')
+    this.setToAddress(TradeMark.address)
+    return 'SUCCESS'
+  }
+  async Servicemark(address_Trade) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Trade = this._process.getProcessByAddress(address_Trade)
+    if (!check_Trade || check_Trade.type !== 'TRADE')
+      throw 'TRADE IS NOT EXIST'
+    let Servicemark = await this._process.createProcess('SERVICE_MARK')
+    this.setToAddress(Servicemark.address)
+    return 'SUCCESS'
+  }
+  async CertificationMark(address_Trade) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Trade = this._process.getProcessByAddress(address_Trade)
+    if (!check_Trade || check_Trade.type !== 'TRADE')
+      throw 'TRADE IS NOT EXIST'
+    let CertificationMark = await this._process.createProcess('CERTIFICATION_MARK')
+    this.setToAddress(CertificationMark.address)
+    return 'SUCCESS'
+  }
+  async CollectiveMark(address_Trade) {
+    this._user.checkUser(this.sender, 'USER')
+    let check_Trade = this._process.getProcessByAddress(address_Trade)
+    if (!check_Trade || check_Trade.type !== 'TRADE')
+      throw 'TRADE IS NOT EXIST'
+    let CollectiveMark = await this._process.createProcess('COLLECTIVE_MARK')
+    this.setToAddress(CollectiveMark.address)
+    return 'SUCCESS'
   }
 }
-export default TokenMain
+export default TokenMain;
